@@ -7,6 +7,7 @@ const app = express();
 
 //import router
 const categoriesRouter = require('./app/api/v1/categories/router');
+const imagesRouter = require('./app/api/v1/images/router');
 
 //inisiasi v1
 const v1 = '/api/v1/cms';
@@ -28,6 +29,7 @@ app.get('/', (req, res) => {
 });
 
 app.use(v1, categoriesRouter);
+app.use(v1, imagesRouter);
 
 //pastikan untuk middleware diletakkan di bawah api karna kalau diatasnya, maka dia akan dipanggil pertama kali sehingga
 //middlewarenya tidak jalan pada di api
