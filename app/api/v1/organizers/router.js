@@ -6,10 +6,10 @@ const {
   getCMSUsers,
 } = require('./controller');
 
-// const {
-//   authenticateUser,
-//   authorizeRoles,
-// } = require('../../../middlewares/auth');
+const {
+  authenticateUser,
+  authorizeRoles,
+} = require('../../../middlewares/auth');
 
 router.post(
   '/organizers',
@@ -20,7 +20,7 @@ router.post(
 
 router.post(
   '/users',
-//   authenticateUser,
+  authenticateUser,
 //   authorizeRoles('organizer'),
   createCMSUser
 );

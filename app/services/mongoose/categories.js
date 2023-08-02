@@ -4,9 +4,10 @@ const Categories = require('../../api/v1/categories/model');
 // import custom error not found dan bad request
 const { NotFoundError, BadRequestError } = require('../../errors');
 
-const getAllCategories = async () => {
+const getAllCategories = async (req) => {
+  console.log(req);
     // mengambil seluruh field di data categories  
-    const result = await Categories.find();
+    const result = await Categories.find({ organizer: req.user.organizer });
 
     //mengambil field tertentu, contoh nama dan id
     // const result = await Categories.find().select('_id name')
@@ -19,12 +20,18 @@ const createCategories = async (req) => {
     const { name } = req.body;
 
     // cari categories dengan field name
-    const check = await Categories.findOne({ name });
+    const check = await Categories.findOne({ 
+      name,
+      organizer: req.user.organizer,
+     });
 
     // apa bila check true / data categories sudah ada maka kita tampilkan error bad request dengan message kategori nama duplikat
     if (check) throw new BadRequestError('kategori nama duplikat');
     // simpan Category yang baru dibuat ke MongoDB
-    const result = await Categories.create({ name });
+    const result = await Categories.create({
+       name,
+       organizer: req.user.organizer,
+      });
 
     return result;
 };
@@ -38,7 +45,10 @@ const getOneCategories = async (req) => {
     const { id } = req.params;
 
     // mencari categories di MongoDB berdasarkan field _id
-    const result = await Categories.findOne({ _id: id });
+    const result = await Categories.findOne({
+       _id: id,
+       organizer: req.user.organizer,
+       });
 
     // bila result tidak mendapatkan data categories maka akan mereturn response `message: 'Id categories tidak ditemukan'`
     if (!result) throw new NotFoundError(`Tidak ada Kategori dengan id :  ${id}`);
@@ -54,6 +64,7 @@ const updateCategories = async (req) => {
   //jadi fungsinya untuk mengecek apakah data yang diinput sebelumnya sudah ada atau belum
   const check = await Categories.findOne({
     name,
+    organizer: req.user.organizer,
     _id: { $ne: id },
   });
 
@@ -79,6 +90,7 @@ const deleteCategories = async (req) => {
   // cari dan hapus categories berdasakan field _id
   const result = await Categories.findOne({
     _id: id,
+    organizer: req.user.organizer,
   });
 
   if (!result) throw new NotFoundError(`Tidak ada Kategori dengan id :  ${id}`);
