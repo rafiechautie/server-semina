@@ -13,18 +13,19 @@ const {
 
 router.post(
   '/organizers',
-//   authenticateUser,
-//   authorizeRoles('owner'),
+  authenticateUser,
+  authorizeRoles('owner'),
   createCMSOrganizer
 );
+
 
 router.post(
   '/users',
   authenticateUser,
-//   authorizeRoles('organizer'),
+  authorizeRoles('organizer'),
   createCMSUser
 );
 
-// router.get('/users', authenticateUser, authorizeRoles('owner'), getCMSUsers);
+router.get('/users', authenticateUser, authorizeRoles('owner'), getCMSUsers);
 
 module.exports = router;

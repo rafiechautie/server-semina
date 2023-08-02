@@ -17,6 +17,11 @@ let talentSchema = Schema(
       ref: 'Image', //harus sama dengan nama model yang di export di model.js folder Images (ref singkatan dari reference, yang artinya dia mereference ke table images)
       required: true, //wajib disi
     },
+    organizer: {
+      type: mongoose.Types.ObjectId,
+      ref: 'Organizer',
+      required: true,
+    },
   },
   { timestamps: true }
 );
