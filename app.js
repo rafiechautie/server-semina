@@ -13,9 +13,10 @@ const eventsRouter = require('./app/api/v1/events/router');
 const organizersRouter = require('./app/api/v1/organizers/router');
 const authCMSRouter = require('./app/api/v1/auth/router');
 const ordersRouter = require('./app/api/v1/orders/router')
+const participantsRouter = require('./app/api/v1/participants/router');
 
 //inisiasi v1
-const v1 = '/api/v1/cms';
+const v1 = '/api/v1';
 
 // middlewares
 const notFoundMiddleware = require('./app/middlewares/not-found');
@@ -33,13 +34,15 @@ app.get('/', (req, res) => {
     });
 });
 
-app.use(v1, categoriesRouter);
-app.use(v1, imagesRouter);
-app.use(v1, talentsRouter);
-app.use(v1, eventsRouter);
-app.use(v1, organizersRouter);
-app.use(v1, authCMSRouter);
-app.use(v1, ordersRouter);
+app.use(`${v1}/cms`, categoriesRouter);
+app.use(`${v1}/cms`, imagesRouter);
+app.use(`${v1}/cms`, talentsRouter);
+app.use(`${v1}/cms`, eventsRouter);
+app.use(`${v1}/cms`, organizersRouter);
+app.use(`${v1}/cms`, authCMSRouter);
+app.use(`${v1}/cms`, ordersRouter);
+app.use(`${v1}`, participantsRouter);
+
 
 //pastikan untuk middleware diletakkan di bawah api karna kalau diatasnya, maka dia akan dipanggil pertama kali sehingga
 //middlewarenya tidak jalan pada di api

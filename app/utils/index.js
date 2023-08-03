@@ -6,13 +6,13 @@ const {
   } = require('./jwt');
   const {
     createTokenUser,
-    // createTokenParticipant,
+    createTokenParticipant,
   } = require('./createTokenUser');
   module.exports = {
     createJWT,
     // createRefreshJWT,
     isTokenValid,
     createTokenUser,
-    // createTokenParticipant,
+    createTokenParticipant,
     // isTokenValidRefreshToken,
   };
