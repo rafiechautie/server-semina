@@ -1,7 +1,7 @@
 const Participant = require('../../api/v1/participants/model');
 const Events = require('../../api/v1/events/model');
 const Orders = require('../../api/v1/orders/model');
-// const Payments = require('../../api/v1/payments/model');
+const Payments = require('../../api/v1/payments/model');
 
 const {
   BadRequestError,
@@ -132,78 +132,78 @@ const getAllOrders = async (req) => {
  * Tugas Send email invoice
  * TODO: Ambil data email dari personal detail
  *  */
-// const checkoutOrder = async (req) => {
-//   const { event, personalDetail, payment, tickets } = req.body;
+const checkoutOrder = async (req) => {
+  const { event, personalDetail, payment, tickets } = req.body;
 
-//   const checkingEvent = await Events.findOne({ _id: event });
-//   if (!checkingEvent) {
-//     throw new NotFoundError('Tidak ada acara dengan id : ' + event);
-//   }
+  const checkingEvent = await Events.findOne({ _id: event });
+  if (!checkingEvent) {
+    throw new NotFoundError('Tidak ada acara dengan id : ' + event);
+  }
 
-//   const checkingPayment = await Payments.findOne({ _id: payment });
+  const checkingPayment = await Payments.findOne({ _id: payment });
 
-//   if (!checkingPayment) {
-//     throw new NotFoundError(
-//       'Tidak ada metode pembayaran dengan id :' + payment
-//     );
-//   }
+  if (!checkingPayment) {
+    throw new NotFoundError(
+      'Tidak ada metode pembayaran dengan id :' + payment
+    );
+  }
 
-//   let totalPay = 0,
-//     totalOrderTicket = 0;
-//   await tickets.forEach((tic) => {
-//     checkingEvent.tickets.forEach((ticket) => {
-//       if (tic.ticketCategories.type === ticket.type) {
-//         if (tic.sumTicket > ticket.stock) {
-//           throw new NotFoundError('Stock event tidak mencukupi');
-//         } else {
-//           ticket.stock -= tic.sumTicket;
+  let totalPay = 0,
+    totalOrderTicket = 0;
+  await tickets.forEach((tic) => {
+    checkingEvent.tickets.forEach((ticket) => {
+      if (tic.ticketCategories.type === ticket.type) {
+        if (tic.sumTicket > ticket.stock) {
+          throw new NotFoundError('Stock event tidak mencukupi');
+        } else {
+          ticket.stock -= tic.sumTicket;
 
-//           totalOrderTicket += tic.sumTicket;
-//           totalPay += tic.ticketCategories.price * tic.sumTicket;
-//         }
-//       }
-//     });
-//   });
+          totalOrderTicket += tic.sumTicket;
+          totalPay += tic.ticketCategories.price * tic.sumTicket;
+        }
+      }
+    });
+  });
 
-//   await checkingEvent.save();
+  await checkingEvent.save();
 
-//   const historyEvent = {
-//     title: checkingEvent.title,
-//     date: checkingEvent.date,
-//     about: checkingEvent.about,
-//     tagline: checkingEvent.tagline,
-//     keyPoint: checkingEvent.keyPoint,
-//     venueName: checkingEvent.venueName,
-//     tickets: tickets,
-//     image: checkingEvent.image,
-//     category: checkingEvent.category,
-//     talent: checkingEvent.talent,
-//     organizer: checkingEvent.organizer,
-//   };
+  const historyEvent = {
+    title: checkingEvent.title,
+    date: checkingEvent.date,
+    about: checkingEvent.about,
+    tagline: checkingEvent.tagline,
+    keyPoint: checkingEvent.keyPoint,
+    venueName: checkingEvent.venueName,
+    tickets: tickets,
+    image: checkingEvent.image,
+    category: checkingEvent.category,
+    talent: checkingEvent.talent,
+    organizer: checkingEvent.organizer,
+  };
 
-//   const result = new Orders({
-//     date: new Date(),
-//     personalDetail: personalDetail,
-//     totalPay,
-//     totalOrderTicket,
-//     orderItems: tickets,
-//     participant: req.participant.id,
-//     event,
-//     historyEvent,
-//     payment,
-//   });
+  const result = new Orders({
+    date: new Date(),
+    personalDetail: personalDetail,
+    totalPay,
+    totalOrderTicket,
+    orderItems: tickets,
+    participant: req.participant.id,
+    event,
+    historyEvent,
+    payment,
+  });
 
-//   await result.save();
-//   return result;
-// };
+  await result.save();
+  return result;
+};
 
-// const getAllPaymentByOrganizer = async (req) => {
-//   const { organizer } = req.params;
+const getAllPaymentByOrganizer = async (req) => {
+  const { organizer } = req.params;
 
-//   const result = await Payments.find({ organizer: organizer });
+  const result = await Payments.find({ organizer: organizer });
 
-//   return result;
-// };
+  return result;
+};
 
 module.exports = {
   signupParticipant,
@@ -212,6 +212,6 @@ module.exports = {
   getAllEvents,
   getOneEvent,
   getAllOrders,
-  // checkoutOrder,
-  // getAllPaymentByOrganizer,
+  checkoutOrder,
+  getAllPaymentByOrganizer,
 };
